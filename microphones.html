@@ -1,0 +1,1892 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Microphones web app</title>
+<style>
+body{
+	font-family:"Helvetica", "Myriad Pro", "Lucida Grande", "Arial", sans-serif;
+}
+img{
+	float:right;	
+}
+
+.banner{
+	display:block;
+	float:left;
+	width:100%;
+}
+
+.slideshowWindow{
+	float:left;	
+	width:600px;
+	height:400px;
+	position:relative;
+	overflow:hidden;
+}
+	
+	.slideshowTape{
+		position:absolute;
+		left:0px;
+		top:0px;	
+		width:600px;
+		height:9200px;/*must be the number of slides multiplied by the height*/
+		-webkit-transition: all 0.3s ease-in-out;
+		-moz-transition: all 0.3s ease-in-out;
+    	-o-transition: all 0.3s ease-in-out;
+	}
+	
+		.slide{
+			float:left;
+			width:580px;
+			height:380px;
+			background:rgba(0,0,0,0);
+			margin:10px;
+			overflow:hidden;
+		}
+
+.buttonGroup{
+	float:left;
+	width:600px;
+	height:20px;
+}
+	a.slideTab:link, a.slideTab:visited{
+		float:right;
+		display:block;
+		width:auto;
+		height:20px;
+		line-height:20px;
+		font-family:"Helvetica", "Myriad Pro", "Lucida Grande", "Arial", sans-serif;
+		/*font-size:10px;*/
+		text-decoration:none;
+		text-align:center;
+		/*color:#666;*/
+		color:#000;
+		margin:0 20px 0 0px;
+	}
+	
+	.hidden{
+		display:none !important;
+		
+	}
+	
+	.shown{
+		display:block !important;
+	}
+	
+	a.slideTab:hover{
+		text-decoration:underline;
+	}
+	
+.showThemAll{
+	width:600px !important;
+	height:9200px !important;
+}
+
+.textbox{
+	margin:0 0 0 50px;
+	width:250px;
+	display:block;
+	float:left;
+}
+
+#copyright{
+	position:relative;
+	float:left;
+	margin:10px 0 0 0;
+	width:100%;
+	z-index:100;
+}
+
+.selectRequiredMsg, .selectInvalidMsg {
+	display: none;
+}
+
+/* These selectors change the way messages look when the widget is in one of the error states (required, invalid).
+ * These classes set a default red border and color for the error text.
+ * The state class (.selectRequiredState or .selectInvalidState) is applied on the top-level container for the widget,
+ * and this way only the specific error message can be shown by setting the display property to "inline".
+ */
+.selectRequiredState .selectRequiredMsg,
+.selectInvalidState .selectInvalidMsg {
+	display: inline;
+	color: #CC3333;
+	border: 1px solid #CC3333;
+}
+
+/* The next three group selectors control the way the core element (SELECT) looks like when the widget is in one of the states: 
+ * focus, required / invalid, valid 
+ * There are two selectors for each state, to cover the two main usecases for the widget:
+ * - the widget id is placed on the top level container for the SELECT
+ * - the widget id is placed on the SELECT element itself (there are no error messages)
+ */
+ 
+/* When the widget is in the valid state the SELECT has a green background applied on it. */
+.selectValidState select, select.selectValidState {
+	background-color: #B8F5B1;
+}
+
+/* When the widget is in an invalid state the SELECT has a red background applied on it. */
+select.selectRequiredState, .selectRequiredState select,
+select.selectInvalidState, .selectInvalidState select {
+	background-color: #FF9F9F;
+}
+
+/* When the widget has received focus, the SELECT has a yellow background applied on it. */
+/*.selectFocusState select, select.selectFocusState {
+	background-color: #FFFFCC;
+}*/
+
+</style>
+<script src="SpryAssets/SpryValidationSelect.js" type="text/javascript"></script>
+</head>
+
+<body>
+<div class="banner">
+<div class="buttonGroup">
+		<a href="#" id="singleButton_1" class="slideTab hidden" onclick="showSingle();">show just one</a>
+        <a href="#" id="showAllButton_1" class="slideTab" onclick="showAll();">show all</a>
+        <a href="#" class="slideTab" onclick="next(1);">next mic</a>
+        <a href="#" class="slideTab" onclick="ran();">RANDOM mic</a>
+		<a href="#" class="slideTab" onclick="next(0);">previous mic</a>
+    	<a href="#" id="slideTab1" class="slideTab hidden" onclick="next(1);">1 / 23</a>
+        <a href="#" id="slideTab2" class="slideTab hidden" onclick="next(1);">2 / 23</a>
+        <a href="#" id="slideTab3" class="slideTab hidden" onclick="next(1);">3 / 23</a>
+        <a href="#" id="slideTab4" class="slideTab hidden" onclick="next(1);">4 / 23</a>
+        <a href="#" id="slideTab5" class="slideTab hidden" onclick="next(1);">5 / 23</a>
+        <a href="#" id="slideTab6" class="slideTab hidden" onclick="next(1);">6 / 23</a>
+        <a href="#" id="slideTab7" class="slideTab hidden" onclick="next(1);">7 / 23</a>
+        <a href="#" id="slideTab8" class="slideTab hidden" onclick="next(1);">8 / 23</a>
+        <a href="#" id="slideTab9" class="slideTab hidden" onclick="next(1);">9 / 23</a>
+        <a href="#" id="slideTab10" class="slideTab hidden" onclick="next(1);">10 / 23</a>
+        <a href="#" id="slideTab11" class="slideTab hidden" onclick="next(1);">11 / 23</a>
+        <a href="#" id="slideTab12" class="slideTab hidden" onclick="next(1);">12 / 23</a>
+        <a href="#" id="slideTab13" class="slideTab hidden" onclick="next(1);">13 / 23</a>
+        <a href="#" id="slideTab14" class="slideTab hidden" onclick="next(1);">14 / 23</a>
+        <a href="#" id="slideTab15" class="slideTab hidden" onclick="next(1);">15 / 23</a>
+        <a href="#" id="slideTab16" class="slideTab hidden" onclick="next(1);">16 / 23</a>
+        <a href="#" id="slideTab17" class="slideTab hidden" onclick="next(1);">17 / 23</a>
+        <a href="#" id="slideTab18" class="slideTab hidden" onclick="next(1);">18 / 23</a>
+        <a href="#" id="slideTab19" class="slideTab hidden" onclick="next(1);">19 / 23</a>
+        <a href="#" id="slideTab20" class="slideTab hidden" onclick="next(1);">20 / 23</a>
+        <a href="#" id="slideTab21" class="slideTab hidden" onclick="next(1);">21 / 23</a>
+        <a href="#" id="slideTab22" class="slideTab hidden" onclick="next(1);">22 / 23</a>
+        <a href="#" id="slideTab23" class="slideTab hidden" onclick="next(1);">23 / 23</a>
+</div>
+</div>
+<div class="banner">
+<div class="slideshowWindow" id="slideshowWindow_1">
+	<div class="slideshowTape" id="slideshowTape_1">
+		<!---
+        slide width:600px
+        slide height:400px
+        number of slides:23
+        --->
+        <div class="slide">
+			<h1><img src="img/imgres-01.jpeg" height='200' /></h1>
+            <div class="textbox">
+            	<p>Make / Model</p>
+                <form id="form1" name="form1" method="post" action="">
+                  <span id="spryselect1">
+                  <select name="Question01" id="Question01">
+                    <!-- Add items and values to the widget-->
+                    <option>Please select an item</option>
+                    <option value="-1">AKG C 414</option>
+                    <option value="-1">Audio-Technica (AT) 4031</option>
+                    <option value="-1">Audio-Technica (AT) 4033</option>
+                    <option value="-1">Audix D2</option>
+                    <option value="-1">Audix D4</option>
+                    <option value="-1">Audix D6</option>
+                    <option value="-1">Audix i5</option>
+                    <option value="-1">Blue Baby Bottle</option>
+                    <option value="-1">CAD E100</option>
+                    <option value="-1">Electro-Voice (EV) ND308</option>
+                    <option value="-1">Electro-Voice (EV) RE10</option>
+                    <option value="-1">Electro-Voice (EV) RE20</option>
+                    <option value="-1">Neumann KM184</option>
+                    <option value="-1">Neumann M147</option>
+                    <option value="-1">Neumann U87</option>
+                    <option value="-1">Rode NT2</option>
+                    <option value="-1">Royer R-122</option>
+                    <option value="-1">Sennheiser e604</option>
+                    <option value="-1">Sennheiser MD421</option>
+                    <option value="-1">Shure Beta 52</option>
+                    <option value="-1">Shure SM57</option>
+                    <option value="1">Shure SM58</option>
+                    <option value="-1">Shure SM81</option>
+                  </select>
+                  <!--<span class="selectInvalidMsg">Try again.</span>--><span class="selectRequiredMsg">Please select an item.</span></span>
+                </form>
+                <p>Capsule Design</p>
+                <form id="form2" name="form2" method="post" action="">
+                  <span id="spryselect2">
+                  <select name="Question02" id="Question02">
+                    <!-- Add items and values to the widget-->
+                    <option>Please select an item</option>
+                    <option value="1">Dynamic</option>
+                    <option value="-1">Condenser</option>
+                    <option value="-1">Ribbon</option>
+                    <option value="-1">Electret-Condenser</option>
+                    <option value="-1">Tube Condenser</option>
+                  </select>
+                  <!--<span class="selectInvalidMsg">Try again.</span>--><span class="selectRequiredMsg">Please select an item.</span></span>
+                </form>
+                <p>Polar Pattern(s)</p>
+                <form id="form3" name="form3" method="post" action="">
+                  <span id="spryselect3">
+                  <select name="Question03" id="Question03">
+                    <!-- Add items and values to the widget-->
+                    <option>Please select an item</option>
+                    <option value="1">Cardioid</option>
+                    <option value="-1">Bidirectional</option>
+                    <option value="-1">Cardioid and Omni</option>
+                    <option value="-1">Cardioid, Omni, and Bi</option>
+                    <option value="-1">Cardioid, Hypercardioid, Omni, and Bi</option>
+                    <option value="-1">Super-Cardioid</option>
+                  </select>
+                  <!--<span class="selectInvalidMsg">Try again.</span>--><span class="selectRequiredMsg">Please select an item.</span></span>
+                </form>
+                
+            </div>
+        </div>
+        <div class="slide">
+			<h1><img src="img/imgres-12.jpeg"  height='200' /></h1>
+            <div class="textbox">
+            	<p>Make / Model</p>
+                <form id="form4" name="form4" method="post" action="">
+                  <span id="spryselect4">
+                  <select name="Question04" id="Question04">
+                    <!-- Add items and values to the widget-->
+                    <option>Please select an item</option>
+                    <option value="-1">AKG C 414</option>
+                    <option value="-1">Audio-Technica (AT) 4031</option>
+                    <option value="-1">Audio-Technica (AT) 4033</option>
+                    <option value="-1">Audix D2</option>
+                    <option value="-1">Audix D4</option>
+                    <option value="1">Audix D6</option>
+                    <option value="-1">Audix i5</option>
+                    <option value="-1">Blue Baby Bottle</option>
+                    <option value="-1">CAD E100</option>
+                    <option value="-1">Electro-Voice (EV) ND308</option>
+                    <option value="-1">Electro-Voice (EV) RE10</option>
+                    <option value="-1">Electro-Voice (EV) RE20</option>
+                    <option value="-1">Neumann KM184</option>
+                    <option value="-1">Neumann M147</option>
+                    <option value="-1">Neumann U87</option>
+                    <option value="-1">Rode NT2</option>
+                    <option value="-1">Royer R-122</option>
+                    <option value="-1">Sennheiser e604</option>
+                    <option value="-1">Sennheiser MD421</option>
+                    <option value="-1">Shure Beta 52</option>
+                    <option value="-1">Shure SM57</option>
+                    <option value="-1">Shure SM58</option>
+                    <option value="-1">Shure SM81</option>
+                  </select>
+                  <!--<span class="selectInvalidMsg">Try again.</span>--><span class="selectRequiredMsg">Please select an item.</span></span>
+                </form>
+                <p>Capsule Design</p>
+                <form id="form5" name="form5" method="post" action="">
+                  <span id="spryselect5">
+                  <select name="Question05" id="Question05">
+                    <!-- Add items and values to the widget-->
+                    <option>Please select an item</option>
+                    <option value="1">Dynamic</option>
+                    <option value="-1">Condenser</option>
+                    <option value="-1">Ribbon</option>
+                    <option value="-1">Electret-Condenser</option>
+                    <option value="-1">Tube Condenser</option>
+                  </select>
+                  <!--<span class="selectInvalidMsg">Try again.</span>--><span class="selectRequiredMsg">Please select an item.</span></span>
+                </form>
+                <p>Polar Pattern(s)</p>
+                <form id="form6" name="form6" method="post" action="">
+                  <span id="spryselect6">
+                  <select name="Question06" id="Question06">
+                    <!-- Add items and values to the widget-->
+                    <option>Please select an item</option>
+                    <option value="1">Cardioid</option>
+                    <option value="-1">Bidirectional</option>
+                    <option value="-1">Cardioid and Omni</option>
+                    <option value="-1">Cardioid, Omni, and Bi</option>
+                    <option value="-1">Cardioid, Hypercardioid, Omni, and Bi</option>
+                    <option value="-1">Super-Cardioid</option>
+                  </select>
+                  <!--<span class="selectInvalidMsg">Try again.</span>--><span class="selectRequiredMsg">Please select an item.</span></span>
+                </form>
+                
+            </div>
+        </div>
+        <div class="slide">
+			<h1><img src="img/imgres-03.jpeg" height='200' /></h1>
+            <div class="textbox">
+            	<p>Make / Model</p>
+                <form id="form7" name="form7" method="post" action="">
+                  <span id="spryselect7">
+                  <select name="Question07" id="Question07">
+                    <!-- Add items and values to the widget-->
+                    <option>Please select an item</option>
+                    <option value="-1">AKG C 414</option>
+                    <option value="-1">Audio-Technica (AT) 4031</option>
+                    <option value="-1">Audio-Technica (AT) 4033</option>
+                    <option value="-1">Audix D2</option>
+                    <option value="-1">Audix D4</option>
+                    <option value="-1">Audix D6</option>
+                    <option value="-1">Audix i5</option>
+                    <option value="-1">Blue Baby Bottle</option>
+                    <option value="-1">CAD E100</option>
+                    <option value="-1">Electro-Voice (EV) ND308</option>
+                    <option value="-1">Electro-Voice (EV) RE10</option>
+                    <option value="-1">Electro-Voice (EV) RE20</option>
+                    <option value="-1">Neumann KM184</option>
+                    <option value="-1">Neumann M147</option>
+                    <option value="-1">Neumann U87</option>
+                    <option value="-1">Rode NT2</option>
+                    <option value="-1">Royer R-122</option>
+                    <option value="-1">Sennheiser e604</option>
+                    <option value="-1">Sennheiser MD421</option>
+                    <option value="1">Shure Beta 52</option>
+                    <option value="-1">Shure SM57</option>
+                    <option value="-1">Shure SM58</option>
+                    <option value="-1">Shure SM81</option>
+                  </select>
+                  <!--<span class="selectInvalidMsg">Try again.</span>--><span class="selectRequiredMsg">Please select an item.</span></span>
+                </form>
+                <p>Capsule Design</p>
+                <form id="form8" name="form8" method="post" action="">
+                  <span id="spryselect8">
+                  <select name="Question08" id="Question08">
+                    <!-- Add items and values to the widget-->
+                    <option>Please select an item</option>
+                    <option value="1">Dynamic</option>
+                    <option value="-1">Condenser</option>
+                    <option value="-1">Ribbon</option>
+                    <option value="-1">Electret-Condenser</option>
+                    <option value="-1">Tube Condenser</option>
+                  </select>
+                  <!--<span class="selectInvalidMsg">Try again.</span>--><span class="selectRequiredMsg">Please select an item.</span></span>
+                </form>
+                <p>Polar Pattern(s)</p>
+                <form id="form9" name="form9" method="post" action="">
+                  <span id="spryselect9">
+                  <select name="Question09" id="Question09">
+                    <!-- Add items and values to the widget-->
+                    <option>Please select an item</option>
+                    <option value="1">Cardioid</option>
+                    <option value="-1">Bidirectional</option>
+                    <option value="-1">Cardioid and Omni</option>
+                    <option value="-1">Cardioid, Omni, and Bi</option>
+                    <option value="-1">Cardioid, Hypercardioid, Omni, and Bi</option>
+                    <option value="-1">Super-Cardioid</option>
+                  </select>
+                  <!--<span class="selectInvalidMsg">Try again.</span>--><span class="selectRequiredMsg">Please select an item.</span></span>
+                </form>
+                
+            </div>
+        </div>
+        <div class="slide">
+			<h1><img src="img/imgres-14.jpeg"  height='200' /></h1>
+            <div class="textbox">
+            	<p>Make / Model</p>
+            <form id="form10" name="form10" method="post" action="">
+                  <span id="spryselect10">
+                  <select name="Question10" id="Question10">
+                    <!-- Add items and values to the widget-->
+                    <option>Please select an item</option>
+                    <option value="-1">AKG C 414</option>
+                    <option value="-1">Audio-Technica (AT) 4031</option>
+                    <option value="-1">Audio-Technica (AT) 4033</option>
+                    <option value="1">Audix D2</option>
+                    <option value="-1">Audix D4</option>
+                    <option value="-1">Audix D6</option>
+                    <option value="-1">Audix i5</option>
+                    <option value="-1">Blue Baby Bottle</option>
+                    <option value="-1">CAD E100</option>
+                    <option value="-1">Electro-Voice (EV) ND308</option>
+                    <option value="-1">Electro-Voice (EV) RE10</option>
+                    <option value="-1">Electro-Voice (EV) RE20</option>
+                    <option value="-1">Neumann KM184</option>
+                    <option value="-1">Neumann M147</option>
+                    <option value="-1">Neumann U87</option>
+                    <option value="-1">Rode NT2</option>
+                    <option value="-1">Royer R-122</option>
+                    <option value="-1">Sennheiser e604</option>
+                    <option value="-1">Sennheiser MD421</option>
+                    <option value="-1">Shure Beta 52</option>
+                    <option value="-1">Shure SM57</option>
+                    <option value="-1">Shure SM58</option>
+                    <option value="-1">Shure SM81</option>
+                  </select>
+                  <!--<span class="selectInvalidMsg">Try again.</span>--><span class="selectRequiredMsg">Please select an item.</span></span>
+                </form>
+                <p>Capsule Design</p>
+                <form id="form11" name="form11" method="post" action="">
+                  <span id="spryselect11">
+                  <select name="Question11" id="Question11">
+                    <!-- Add items and values to the widget-->
+                    <option>Please select an item</option>
+                    <option value="1">Dynamic</option>
+                    <option value="-1">Condenser</option>
+                    <option value="-1">Ribbon</option>
+                    <option value="-1">Electret-Condenser</option>
+                    <option value="-1">Tube Condenser</option>
+                  </select>
+                  <!--<span class="selectInvalidMsg">Try again.</span>--><span class="selectRequiredMsg">Please select an item.</span></span>
+                </form>
+                <p>Polar Pattern(s)</p>
+                <form id="form12" name="form12" method="post" action="">
+                  <span id="spryselect12">
+                  <select name="Question12" id="Question12">
+                    <!-- Add items and values to the widget-->
+                    <option>Please select an item</option>
+                    <option value="1">Cardioid</option>
+                    <option value="-1">Bidirectional</option>
+                    <option value="-1">Cardioid and Omni</option>
+                    <option value="-1">Cardioid, Omni, and Bi</option>
+                    <option value="-1">Cardioid, Hypercardioid, Omni, and Bi</option>
+                    <option value="-1">Super-Cardioid</option>
+                  </select>
+                  <!--<span class="selectInvalidMsg">Try again.</span>--><span class="selectRequiredMsg">Please select an item.</span></span>
+                </form>
+                </div>
+        </div>
+        <div class="slide">
+			<h1><img src="img/imgres-05.jpeg" height='200' /></h1>
+            <div class="textbox">
+            	<p>Make / Model</p>
+            <form id="form13" name="form13" method="post" action="">
+                  <span id="spryselect13">
+                  <select name="Question13" id="Question13">
+                    <!-- Add items and values to the widget-->
+                    <option>Please select an item</option>
+                    <option value="-1">AKG C 414</option>
+                    <option value="-1">Audio-Technica (AT) 4031</option>
+                    <option value="-1">Audio-Technica (AT) 4033</option>
+                    <option value="-1">Audix D2</option>
+                    <option value="-1">Audix D4</option>
+                    <option value="-1">Audix D6</option>
+                    <option value="-1">Audix i5</option>
+                    <option value="-1">Blue Baby Bottle</option>
+                    <option value="-1">CAD E100</option>
+                    <option value="-1">Electro-Voice (EV) ND308</option>
+                    <option value="1">Electro-Voice (EV) RE10</option>
+                    <option value="-1">Electro-Voice (EV) RE20</option>
+                    <option value="-1">Neumann KM184</option>
+                    <option value="-1">Neumann M147</option>
+                    <option value="-1">Neumann U87</option>
+                    <option value="-1">Rode NT2</option>
+                    <option value="-1">Royer R-122</option>
+                    <option value="-1">Sennheiser e604</option>
+                    <option value="-1">Sennheiser MD421</option>
+                    <option value="-1">Shure Beta 52</option>
+                    <option value="-1">Shure SM57</option>
+                    <option value="-1">Shure SM58</option>
+                    <option value="-1">Shure SM81</option>
+                  </select>
+                  <!--<span class="selectInvalidMsg">Try again.</span>--><span class="selectRequiredMsg">Please select an item.</span></span>
+                </form>
+                <p>Capsule Design</p>
+                <form id="form14" name="form14" method="post" action="">
+                  <span id="spryselect14">
+                  <select name="Question14" id="Question14">
+                    <!-- Add items and values to the widget-->
+                    <option>Please select an item</option>
+                    <option value="1">Dynamic</option>
+                    <option value="-1">Condenser</option>
+                    <option value="-1">Ribbon</option>
+                    <option value="-1">Electret-Condenser</option>
+                    <option value="-1">Tube Condenser</option>
+                  </select>
+                  <!--<span class="selectInvalidMsg">Try again.</span>--><span class="selectRequiredMsg">Please select an item.</span></span>
+                </form>
+                <p>Polar Pattern(s)</p>
+                <form id="form15" name="form15" method="post" action="">
+                  <span id="spryselect15">
+                  <select name="Question15" id="Question15">
+                    <!-- Add items and values to the widget-->
+                    <option>Please select an item</option>
+                    <option value="1">Cardioid</option>
+                    <option value="-1">Bidirectional</option>
+                    <option value="-1">Cardioid and Omni</option>
+                    <option value="-1">Cardioid, Omni, and Bi</option>
+                    <option value="-1">Cardioid, Hypercardioid, Omni, and Bi</option>
+                    <option value="-1">Super-Cardioid</option>
+                  </select>
+                  <!--<span class="selectInvalidMsg">Try again.</span>--><span class="selectRequiredMsg">Please select an item.</span></span>
+                </form>
+                </div>
+        </div>
+        <div class="slide">
+			<h1><img src="img/imgres-16.jpeg"  height='200' /></h1>
+            <div class="textbox">
+            	<p>Make / Model</p>
+                <form id="form16" name="form16" method="post" action="">
+                  <span id="spryselect16">
+                  <select name="Question16" id="Question16">
+                    <!-- Add items and values to the widget-->
+                    <option>Please select an item</option>
+                    <option value="-1">AKG C 414</option>
+                    <option value="-1">Audio-Technica (AT) 4031</option>
+                    <option value="-1">Audio-Technica (AT) 4033</option>
+                    <option value="-1">Audix D2</option>
+                    <option value="-1">Audix D4</option>
+                    <option value="-1">Audix D6</option>
+                    <option value="-1">Audix i5</option>
+                    <option value="1">Blue Baby Bottle</option>
+                    <option value="-1">CAD E100</option>
+                    <option value="-1">Electro-Voice (EV) ND308</option>
+                    <option value="-1">Electro-Voice (EV) RE10</option>
+                    <option value="-1">Electro-Voice (EV) RE20</option>
+                    <option value="-1">Neumann KM184</option>
+                    <option value="-1">Neumann M147</option>
+                    <option value="-1">Neumann U87</option>
+                    <option value="-1">Rode NT2</option>
+                    <option value="-1">Royer R-122</option>
+                    <option value="-1">Sennheiser e604</option>
+                    <option value="-1">Sennheiser MD421</option>
+                    <option value="-1">Shure Beta 52</option>
+                    <option value="-1">Shure SM57</option>
+                    <option value="-1">Shure SM58</option>
+                    <option value="-1">Shure SM81</option>
+                  </select>
+                  <!--<span class="selectInvalidMsg">Try again.</span>--><span class="selectRequiredMsg">Please select an item.</span></span>
+                </form>
+                <p>Capsule Design</p>
+                <form id="form17" name="form17" method="post" action="">
+                  <span id="spryselect17">
+                  <select name="Question17" id="Question17">
+                    <!-- Add items and values to the widget-->
+                    <option>Please select an item</option>
+                    <option value="-1">Dynamic</option>
+                    <option value="1">Condenser</option>
+                    <option value="-1">Ribbon</option>
+                    <option value="-1">Electret-Condenser</option>
+                    <option value="-1">Tube Condenser</option>
+                  </select>
+                  <!--<span class="selectInvalidMsg">Try again.</span>--><span class="selectRequiredMsg">Please select an item.</span></span>
+                </form>
+                <p>Polar Pattern(s)</p>
+                <form id="form18" name="form18" method="post" action="">
+                  <span id="spryselect18">
+                  <select name="Question18" id="Question18">
+                    <!-- Add items and values to the widget-->
+                    <option>Please select an item</option>
+                    <option value="1">Cardioid</option>
+                    <option value="-1">Bidirectional</option>
+                    <option value="-1">Cardioid and Omni</option>
+                    <option value="-1">Cardioid, Omni, and Bi</option>
+                    <option value="-1">Cardioid, Hypercardioid, Omni, and Bi</option>
+                    <option value="-1">Super-Cardioid</option>
+                  </select>
+                  <!--<span class="selectInvalidMsg">Try again.</span>--><span class="selectRequiredMsg">Please select an item.</span></span>
+                </form>
+                
+            </div>
+        </div>
+        <div class="slide">
+			<h1><img src="img/imgres-07.jpeg" width='200' /></h1>
+            <div class="textbox">
+            	<p>Make / Model</p>
+                <form id="form19" name="form19" method="post" action="">
+                  <span id="spryselect19">
+                  <select name="Question19" id="Question19">
+                    <!-- Add items and values to the widget-->
+                    <option>Please select an item</option>
+                    <option value="-1">AKG C 414</option>
+                    <option value="-1">Audio-Technica (AT) 4031</option>
+                    <option value="-1">Audio-Technica (AT) 4033</option>
+                    <option value="-1">Audix D2</option>
+                    <option value="-1">Audix D4</option>
+                    <option value="-1">Audix D6</option>
+                    <option value="-1">Audix i5</option>
+                    <option value="-1">Blue Baby Bottle</option>
+                    <option value="-1">CAD E100</option>
+                    <option value="-1">Electro-Voice (EV) ND308</option>
+                    <option value="-1">Electro-Voice (EV) RE10</option>
+                    <option value="-1">Electro-Voice (EV) RE20</option>
+                    <option value="-1">Neumann KM184</option>
+                    <option value="-1">Neumann M147</option>
+                    <option value="-1">Neumann U87</option>
+                    <option value="-1">Rode NT2</option>
+                    <option value="-1">Royer R-122</option>
+                    <option value="-1">Sennheiser e604</option>
+                    <option value="1">Sennheiser MD421</option>
+                    <option value="-1">Shure Beta 52</option>
+                    <option value="-1">Shure SM57</option>
+                    <option value="-1">Shure SM58</option>
+                    <option value="-1">Shure SM81</option>
+                  </select>
+                  <!--<span class="selectInvalidMsg">Try again.</span>--><span class="selectRequiredMsg">Please select an item.</span></span>
+                </form>
+                <p>Capsule Design</p>
+                <form id="form20" name="form20" method="post" action="">
+                  <span id="spryselect20">
+                  <select name="Question20" id="Question20">
+                    <!-- Add items and values to the widget-->
+                    <option>Please select an item</option>
+                    <option value="1">Dynamic</option>
+                    <option value="-1">Condenser</option>
+                    <option value="-1">Ribbon</option>
+                    <option value="-1">Electret-Condenser</option>
+                    <option value="-1">Tube Condenser</option>
+                  </select>
+                  <!--<span class="selectInvalidMsg">Try again.</span>--><span class="selectRequiredMsg">Please select an item.</span></span>
+                </form>
+                <p>Polar Pattern(s)</p>
+                <form id="form21" name="form21" method="post" action="">
+                  <span id="spryselect21">
+                  <select name="Question21" id="Question21">
+                    <!-- Add items and values to the widget-->
+                    <option>Please select an item</option>
+                    <option value="1">Cardioid</option>
+                    <option value="-1">Bidirectional</option>
+                    <option value="-1">Cardioid and Omni</option>
+                    <option value="-1">Cardioid, Omni, and Bi</option>
+                    <option value="-1">Cardioid, Hypercardioid, Omni, and Bi</option>
+                    <option value="-1">Super-Cardioid</option>
+                  </select>
+                  <!--<span class="selectInvalidMsg">Try again.</span>--><span class="selectRequiredMsg">Please select an item.</span></span>
+                </form>
+                
+            </div>
+        </div>
+        <div class="slide">
+			<h1><img src="img/imgres-18.jpeg"  height='200' /></h1>
+            <div class="textbox">
+            	<p>Make / Model</p>
+                <form id="form22" name="form22" method="post" action="">
+                  <span id="spryselect22">
+                  <select name="Question22" id="Question22">
+                    <!-- Add items and values to the widget-->
+                    <option>Please select an item</option>
+                    <option value="-1">AKG C 414</option>
+                    <option value="-1">Audio-Technica (AT) 4031</option>
+                    <option value="-1">Audio-Technica (AT) 4033</option>
+                    <option value="-1">Audix D2</option>
+                    <option value="-1">Audix D4</option>
+                    <option value="-1">Audix D6</option>
+                    <option value="-1">Audix i5</option>
+                    <option value="-1">Blue Baby Bottle</option>
+                    <option value="-1">CAD E100</option>
+                    <option value="-1">Electro-Voice (EV) ND308</option>
+                    <option value="-1">Electro-Voice (EV) RE10</option>
+                    <option value="-1">Electro-Voice (EV) RE20</option>
+                    <option value="-1">Neumann KM184</option>
+                    <option value="-1">Neumann M147</option>
+                    <option value="-1">Neumann U87</option>
+                    <option value="1">Rode NT2</option>
+                    <option value="-1">Royer R-122</option>
+                    <option value="-1">Sennheiser e604</option>
+                    <option value="-1">Sennheiser MD421</option>
+                    <option value="-1">Shure Beta 52</option>
+                    <option value="-1">Shure SM57</option>
+                    <option value="-1">Shure SM58</option>
+                    <option value="-1">Shure SM81</option>
+                  </select>
+                  <!--<span class="selectInvalidMsg">Try again.</span>--><span class="selectRequiredMsg">Please select an item.</span></span>
+                </form>
+                <p>Capsule Design</p>
+                <form id="form23" name="form23" method="post" action="">
+                  <span id="spryselect23">
+                  <select name="Question23" id="Question23">
+                    <!-- Add items and values to the widget-->
+                    <option>Please select an item</option>
+                    <option value="-1">Dynamic</option>
+                    <option value="1">Condenser</option>
+                    <option value="-1">Ribbon</option>
+                    <option value="-1">Electret-Condenser</option>
+                    <option value="-1">Tube Condenser</option>
+                  </select>
+                  <!--<span class="selectInvalidMsg">Try again.</span>--><span class="selectRequiredMsg">Please select an item.</span></span>
+                </form>
+                <p>Polar Pattern(s)</p>
+                <form id="form24" name="form24" method="post" action="">
+                  <span id="spryselect24">
+                  <select name="Question24" id="Question24">
+                    <!-- Add items and values to the widget-->
+                    <option>Please select an item</option>
+                    <option value="-1">Cardioid</option>
+                    <option value="-1">Bidirectional</option>
+                    <option value="1">Cardioid and Omni</option>
+                    <option value="-1">Cardioid, Omni, and Bi</option>
+                    <option value="-1">Cardioid, Hypercardioid, Omni, and Bi</option>
+                    <option value="-1">Super-Cardioid</option>
+                  </select>
+                  <!--<span class="selectInvalidMsg">Try again.</span>--><span class="selectRequiredMsg">Please select an item.</span></span>
+                </form>
+                
+            </div>
+        </div>
+        <div class="slide">
+			<h1><img src="img/imgres-09.jpeg" height='200' /></h1>
+            <div class="textbox">
+            	<p>Make / Model</p>
+                <form id="form25" name="form25" method="post" action="">
+                  <span id="spryselect25">
+                  <select name="Question25" id="Question25">
+                    <!-- Add items and values to the widget-->
+                    <option>Please select an item</option>
+                    <option value="1">AKG C 414</option>
+                    <option value="-1">Audio-Technica (AT) 4031</option>
+                    <option value="-1">Audio-Technica (AT) 4033</option>
+                    <option value="-1">Audix D2</option>
+                    <option value="-1">Audix D4</option>
+                    <option value="-1">Audix D6</option>
+                    <option value="-1">Audix i5</option>
+                    <option value="-1">Blue Baby Bottle</option>
+                    <option value="-1">CAD E100</option>
+                    <option value="-1">Electro-Voice (EV) ND308</option>
+                    <option value="-1">Electro-Voice (EV) RE10</option>
+                    <option value="-1">Electro-Voice (EV) RE20</option>
+                    <option value="-1">Neumann KM184</option>
+                    <option value="-1">Neumann M147</option>
+                    <option value="-1">Neumann U87</option>
+                    <option value="-1">Rode NT2</option>
+                    <option value="-1">Royer R-122</option>
+                    <option value="-1">Sennheiser e604</option>
+                    <option value="-1">Sennheiser MD421</option>
+                    <option value="-1">Shure Beta 52</option>
+                    <option value="-1">Shure SM57</option>
+                    <option value="-1">Shure SM58</option>
+                    <option value="-1">Shure SM81</option>
+                  </select>
+                  <!--<span class="selectInvalidMsg">Try again.</span>--><span class="selectRequiredMsg">Please select an item.</span></span>
+                </form>
+                <p>Capsule Design</p>
+                <form id="form26" name="form26" method="post" action="">
+                  <span id="spryselect26">
+                  <select name="Question26" id="Question26">
+                    <!-- Add items and values to the widget-->
+                    <option>Please select an item</option>
+                    <option value="-1">Dynamic</option>
+                    <option value="1">Condenser</option>
+                    <option value="-1">Ribbon</option>
+                    <option value="-1">Electret-Condenser</option>
+                    <option value="-1">Tube Condenser</option>
+                  </select>
+                  <!--<span class="selectInvalidMsg">Try again.</span>--><span class="selectRequiredMsg">Please select an item.</span></span>
+                </form>
+                <p>Polar Pattern(s)</p>
+                <form id="form27" name="form27" method="post" action="">
+                  <span id="spryselect27">
+                  <select name="Question27" id="Question27">
+                    <!-- Add items and values to the widget-->
+                    <option>Please select an item</option>
+                    <option value="-1">Cardioid</option>
+                    <option value="-1">Bidirectional</option>
+                    <option value="-1">Cardioid and Omni</option>
+                    <option value="-1">Cardioid, Omni, and Bi</option>
+                    <option value="1">Cardioid, Hypercardioid, Omni, and Bi</option>
+                    <option value="-1">Super-Cardioid</option>
+                  </select>
+                  <!--<span class="selectInvalidMsg">Try again.</span>--><span class="selectRequiredMsg">Please select an item.</span></span>
+                </form>
+                
+            </div>
+        </div>
+        <div class="slide">
+			<h1><img src="img/imgres-20.jpeg"  width='200' /></h1>
+            <div class="textbox">
+            	<p>Make / Model</p>
+                <form id="form28" name="form28" method="post" action="">
+                  <span id="spryselect28">
+                  <select name="Question28" id="Question28">
+                    <!-- Add items and values to the widget-->
+                    <option>Please select an item</option>
+                    <option value="-1">AKG C 414</option>
+                    <option value="-1">Audio-Technica (AT) 4031</option>
+                    <option value="-1">Audio-Technica (AT) 4033</option>
+                    <option value="-1">Audix D2</option>
+                    <option value="-1">Audix D4</option>
+                    <option value="-1">Audix D6</option>
+                    <option value="-1">Audix i5</option>
+                    <option value="-1">Blue Baby Bottle</option>
+                    <option value="-1">CAD E100</option>
+                    <option value="-1">Electro-Voice (EV) ND308</option>
+                    <option value="-1">Electro-Voice (EV) RE10</option>
+                    <option value="-1">Electro-Voice (EV) RE20</option>
+                    <option value="1">Neumann KM184</option>
+                    <option value="-1">Neumann M147</option>
+                    <option value="-1">Neumann U87</option>
+                    <option value="-1">Rode NT2</option>
+                    <option value="-1">Royer R-122</option>
+                    <option value="-1">Sennheiser e604</option>
+                    <option value="-1">Sennheiser MD421</option>
+                    <option value="-1">Shure Beta 52</option>
+                    <option value="-1">Shure SM57</option>
+                    <option value="-1">Shure SM58</option>
+                    <option value="-1">Shure SM81</option>
+                  </select>
+                  <!--<span class="selectInvalidMsg">Try again.</span>--><span class="selectRequiredMsg">Please select an item.</span></span>
+                </form>
+                <p>Capsule Design</p>
+                <form id="form29" name="form29" method="post" action="">
+                  <span id="spryselect29">
+                  <select name="Question29" id="Question29">
+                    <!-- Add items and values to the widget-->
+                    <option>Please select an item</option>
+                    <option value="-1">Dynamic</option>
+                    <option value="1">Condenser</option>
+                    <option value="-1">Ribbon</option>
+                    <option value="-1">Electret-Condenser</option>
+                    <option value="-1">Tube Condenser</option>
+                  </select>
+                  <!--<span class="selectInvalidMsg">Try again.</span>--><span class="selectRequiredMsg">Please select an item.</span></span>
+                </form>
+                <p>Polar Pattern(s)</p>
+                <form id="form30" name="form30" method="post" action="">
+                  <span id="spryselect30">
+                  <select name="Question30" id="Question30">
+                    <!-- Add items and values to the widget-->
+                    <option>Please select an item</option>
+                    <option value="1">Cardioid</option>
+                    <option value="-1">Bidirectional</option>
+                    <option value="-1">Cardioid and Omni</option>
+                    <option value="-1">Cardioid, Omni, and Bi</option>
+                    <option value="-1">Cardioid, Hypercardioid, Omni, and Bi</option>
+                    <option value="-1">Super-Cardioid</option>
+                  </select>
+                  <!--<span class="selectInvalidMsg">Try again.</span>--><span class="selectRequiredMsg">Please select an item.</span></span>
+                </form>
+                
+            </div>
+        </div>
+        <div class="slide">
+			<h1><img src="img/imgres-11.jpeg" width='200' /></h1>
+            <div class="textbox">
+            	<p>Make / Model</p>
+                <form id="form31" name="form31" method="post" action="">
+                  <span id="spryselect31">
+                  <select name="Question31" id="Question31">
+                    <!-- Add items and values to the widget-->
+                    <option>Please select an item</option>
+                    <option value="-1">AKG C 414</option>
+                    <option value="1">Audio-Technica (AT) 4031</option>
+                    <option value="-1">Audio-Technica (AT) 4033</option>
+                    <option value="-1">Audix D2</option>
+                    <option value="-1">Audix D4</option>
+                    <option value="-1">Audix D6</option>
+                    <option value="-1">Audix i5</option>
+                    <option value="-1">Blue Baby Bottle</option>
+                    <option value="-1">CAD E100</option>
+                    <option value="-1">Electro-Voice (EV) ND308</option>
+                    <option value="-1">Electro-Voice (EV) RE10</option>
+                    <option value="-1">Electro-Voice (EV) RE20</option>
+                    <option value="-1">Neumann KM184</option>
+                    <option value="-1">Neumann M147</option>
+                    <option value="-1">Neumann U87</option>
+                    <option value="-1">Rode NT2</option>
+                    <option value="-1">Royer R-122</option>
+                    <option value="-1">Sennheiser e604</option>
+                    <option value="-1">Sennheiser MD421</option>
+                    <option value="-1">Shure Beta 52</option>
+                    <option value="-1">Shure SM57</option>
+                    <option value="-1">Shure SM58</option>
+                    <option value="-1">Shure SM81</option>
+                  </select>
+                  <!--<span class="selectInvalidMsg">Try again.</span>--><span class="selectRequiredMsg">Please select an item.</span></span>
+                </form>
+                <p>Capsule Design</p>
+                <form id="form32" name="form32" method="post" action="">
+                  <span id="spryselect32">
+                  <select name="Question32" id="Question32">
+                    <!-- Add items and values to the widget-->
+                    <option>Please select an item</option>
+                    <option value="-1">Dynamic</option>
+                    <option value="1">Condenser</option>
+                    <option value="-1">Ribbon</option>
+                    <option value="-1">Electret-Condenser</option>
+                    <option value="-1">Tube Condenser</option>
+                  </select>
+                  <!--<span class="selectInvalidMsg">Try again.</span>--><span class="selectRequiredMsg">Please select an item.</span></span>
+                </form>
+                <p>Polar Pattern(s)</p>
+                <form id="form33" name="form33" method="post" action="">
+                  <span id="spryselect33">
+                  <select name="Question33" id="Question33">
+                    <!-- Add items and values to the widget-->
+                    <option>Please select an item</option>
+                    <option value="1">Cardioid</option>
+                    <option value="-1">Bidirectional</option>
+                    <option value="-1">Cardioid and Omni</option>
+                    <option value="-1">Cardioid, Omni, and Bi</option>
+                    <option value="-1">Cardioid, Hypercardioid, Omni, and Bi</option>
+                    <option value="-1">Super-Cardioid</option>
+                  </select>
+                  <!--<span class="selectInvalidMsg">Try again.</span>--><span class="selectRequiredMsg">Please select an item.</span></span>
+                </form>
+                
+            </div>
+        </div>
+        <div class="slide">
+			<h1><img src="img/imgres-22.jpeg"  height='200' /></h1>
+            <div class="textbox">
+            	<p>Make / Model</p>
+                <form id="form34" name="form34" method="post" action="">
+                  <span id="spryselect34">
+                  <select name="Question34" id="Question34">
+                    <!-- Add items and values to the widget-->
+                    <option>Please select an item</option>
+                    <option value="-1">AKG C 414</option>
+                    <option value="-1">Audio-Technica (AT) 4031</option>
+                    <option value="-1">Audio-Technica (AT) 4033</option>
+                    <option value="-1">Audix D2</option>
+                    <option value="-1">Audix D4</option>
+                    <option value="-1">Audix D6</option>
+                    <option value="-1">Audix i5</option>
+                    <option value="-1">Blue Baby Bottle</option>
+                    <option value="1">CAD E100</option>
+                    <option value="-1">Electro-Voice (EV) ND308</option>
+                    <option value="-1">Electro-Voice (EV) RE10</option>
+                    <option value="-1">Electro-Voice (EV) RE20</option>
+                    <option value="-1">Neumann KM184</option>
+                    <option value="-1">Neumann M147</option>
+                    <option value="-1">Neumann U87</option>
+                    <option value="-1">Rode NT2</option>
+                    <option value="-1">Royer R-122</option>
+                    <option value="-1">Sennheiser e604</option>
+                    <option value="-1">Sennheiser MD421</option>
+                    <option value="-1">Shure Beta 52</option>
+                    <option value="-1">Shure SM57</option>
+                    <option value="-1">Shure SM58</option>
+                    <option value="-1">Shure SM81</option>
+                  </select>
+                  <!--<span class="selectInvalidMsg">Try again.</span>--><span class="selectRequiredMsg">Please select an item.</span></span>
+                </form>
+                <p>Capsule Design</p>
+                <form id="form35" name="form35" method="post" action="">
+                  <span id="spryselect35">
+                  <select name="Question35" id="Question35">
+                    <!-- Add items and values to the widget-->
+                    <option>Please select an item</option>
+                    <option value="1">Dynamic</option>
+                    <option value="-1">Condenser</option>
+                    <option value="-1">Ribbon</option>
+                    <option value="1">Electret-Condenser</option>
+                    <option value="-1">Tube Condenser</option>
+                  </select>
+                  <!--<span class="selectInvalidMsg">Try again.</span>--><span class="selectRequiredMsg">Please select an item.</span></span>
+                </form>
+                <p>Polar Pattern(s)</p>
+                <form id="form36" name="form36" method="post" action="">
+                  <span id="spryselect36">
+                  <select name="Question36" id="Question36">
+                    <!-- Add items and values to the widget-->
+                    <option>Please select an item</option>
+                    <option value="-1">Cardioid</option>
+                    <option value="-1">Bidirectional</option>
+                    <option value="-1">Cardioid and Omni</option>
+                    <option value="-1">Cardioid, Omni, and Bi</option>
+                    <option value="-1">Cardioid, Hypercardioid, Omni, and Bi</option>
+                    <option value="1">Super-Cardioid</option>
+                  </select>
+                  <!--<span class="selectInvalidMsg">Try again.</span>--><span class="selectRequiredMsg">Please select an item.</span></span>
+                </form>
+                
+            </div>
+        </div>
+        <div class="slide">
+			<h1><img src="img/imgres-13.jpeg" height='200' /></h1>
+            <div class="textbox">
+            	<p>Make / Model</p>
+                <form id="form37" name="form37" method="post" action="">
+                  <span id="spryselect37">
+                  <select name="Question37" id="Question37">
+                    <!-- Add items and values to the widget-->
+                    <option>Please select an item</option>
+                    <option value="-1">AKG C 414</option>
+                    <option value="-1">Audio-Technica (AT) 4031</option>
+                    <option value="-1">Audio-Technica (AT) 4033</option>
+                    <option value="-1">Audix D2</option>
+                    <option value="1">Audix D4</option>
+                    <option value="-1">Audix D6</option>
+                    <option value="-1">Audix i5</option>
+                    <option value="-1">Blue Baby Bottle</option>
+                    <option value="-1">CAD E100</option>
+                    <option value="-1">Electro-Voice (EV) ND308</option>
+                    <option value="-1">Electro-Voice (EV) RE10</option>
+                    <option value="-1">Electro-Voice (EV) RE20</option>
+                    <option value="-1">Neumann KM184</option>
+                    <option value="-1">Neumann M147</option>
+                    <option value="-1">Neumann U87</option>
+                    <option value="-1">Rode NT2</option>
+                    <option value="-1">Royer R-122</option>
+                    <option value="-1">Sennheiser e604</option>
+                    <option value="-1">Sennheiser MD421</option>
+                    <option value="-1">Shure Beta 52</option>
+                    <option value="-1">Shure SM57</option>
+                    <option value="-1">Shure SM58</option>
+                    <option value="-1">Shure SM81</option>
+                  </select>
+                  <!--<span class="selectInvalidMsg">Try again.</span>--><span class="selectRequiredMsg">Please select an item.</span></span>
+                </form>
+                <p>Capsule Design</p>
+                <form id="form38" name="form38" method="post" action="">
+                  <span id="spryselect38">
+                  <select name="Question38" id="Question38">
+                    <!-- Add items and values to the widget-->
+                    <option>Please select an item</option>
+                    <option value="1">Dynamic</option>
+                    <option value="-1">Condenser</option>
+                    <option value="-1">Ribbon</option>
+                    <option value="-1">Electret-Condenser</option>
+                    <option value="-1">Tube Condenser</option>
+                  </select>
+                  <!--<span class="selectInvalidMsg">Try again.</span>--><span class="selectRequiredMsg">Please select an item.</span></span>
+                </form>
+                <p>Polar Pattern(s)</p>
+                <form id="form39" name="form39" method="post" action="">
+                  <span id="spryselect39">
+                  <select name="Question39" id="Question39">
+                    <!-- Add items and values to the widget-->
+                    <option>Please select an item</option>
+                    <option value="1">Cardioid</option>
+                    <option value="-1">Bidirectional</option>
+                    <option value="-1">Cardioid and Omni</option>
+                    <option value="-1">Cardioid, Omni, and Bi</option>
+                    <option value="-1">Cardioid, Hypercardioid, Omni, and Bi</option>
+                    <option value="-1">Super-Cardioid</option>
+                  </select>
+                  <!--<span class="selectInvalidMsg">Try again.</span>--><span class="selectRequiredMsg">Please select an item.</span></span>
+                </form>
+                
+            </div>
+        </div>
+        <div class="slide">
+			<h1><img src="img/imgres-04.jpeg"  width='200' /></h1>
+            <div class="textbox">
+            	<p>Make / Model</p>
+                <form id="form40" name="form40" method="post" action="">
+                  <span id="spryselect40">
+                  <select name="Question40" id="Question40">
+                    <!-- Add items and values to the widget-->
+                    <option>Please select an item</option>
+                    <option value="-1">AKG C 414</option>
+                    <option value="-1">Audio-Technica (AT) 4031</option>
+                    <option value="-1">Audio-Technica (AT) 4033</option>
+                    <option value="-1">Audix D2</option>
+                    <option value="-1">Audix D4</option>
+                    <option value="-1">Audix D6</option>
+                    <option value="-1">Audix i5</option>
+                    <option value="-1">Blue Baby Bottle</option>
+                    <option value="-1">CAD E100</option>
+                    <option value="-1">Electro-Voice (EV) ND308</option>
+                    <option value="-1">Electro-Voice (EV) RE10</option>
+                    <option value="1">Electro-Voice (EV) RE20</option>
+                    <option value="-1">Neumann KM184</option>
+                    <option value="-1">Neumann M147</option>
+                    <option value="-1">Neumann U87</option>
+                    <option value="-1">Rode NT2</option>
+                    <option value="-1">Royer R-122</option>
+                    <option value="-1">Sennheiser e604</option>
+                    <option value="-1">Sennheiser MD421</option>
+                    <option value="-1">Shure Beta 52</option>
+                    <option value="-1">Shure SM57</option>
+                    <option value="-1">Shure SM58</option>
+                    <option value="-1">Shure SM81</option>
+                  </select>
+                  <!--<span class="selectInvalidMsg">Try again.</span>--><span class="selectRequiredMsg">Please select an item.</span></span>
+                </form>
+                <p>Capsule Design</p>
+                <form id="form41" name="form41" method="post" action="">
+                  <span id="spryselect41">
+                  <select name="Question41" id="Question41">
+                    <!-- Add items and values to the widget-->
+                    <option>Please select an item</option>
+                    <option value="1">Dynamic</option>
+                    <option value="-1">Condenser</option>
+                    <option value="-1">Ribbon</option>
+                    <option value="-1">Electret-Condenser</option>
+                    <option value="-1">Tube Condenser</option>
+                  </select>
+                  <!--<span class="selectInvalidMsg">Try again.</span>--><span class="selectRequiredMsg">Please select an item.</span></span>
+                </form>
+                <p>Polar Pattern(s)</p>
+                <form id="form42" name="form42" method="post" action="">
+                  <span id="spryselect42">
+                  <select name="Question42" id="Question42">
+                    <!-- Add items and values to the widget-->
+                    <option>Please select an item</option>
+                    <option value="1">Cardioid</option>
+                    <option value="-1">Bidirectional</option>
+                    <option value="-1">Cardioid and Omni</option>
+                    <option value="-1">Cardioid, Omni, and Bi</option>
+                    <option value="-1">Cardioid, Hypercardioid, Omni, and Bi</option>
+                    <option value="-1">Super-Cardioid</option>
+                  </select>
+                  <!--<span class="selectInvalidMsg">Try again.</span>--><span class="selectRequiredMsg">Please select an item.</span></span>
+                </form>
+                
+            </div>
+        </div>
+        <div class="slide">
+			<h1><img src="img/imgres-15.jpeg" height='200' /></h1>
+            <div class="textbox">
+            	<p>Make / Model</p>
+                <form id="form43" name="form43" method="post" action="">
+                  <span id="spryselect43">
+                  <select name="Question43" id="Question43">
+                    <!-- Add items and values to the widget-->
+                    <option>Please select an item</option>
+                    <option value="-1">AKG C 414</option>
+                    <option value="-1">Audio-Technica (AT) 4031</option>
+                    <option value="-1">Audio-Technica (AT) 4033</option>
+                    <option value="-1">Audix D2</option>
+                    <option value="-1">Audix D4</option>
+                    <option value="-1">Audix D6</option>
+                    <option value="1">Audix i5</option>
+                    <option value="-1">Blue Baby Bottle</option>
+                    <option value="-1">CAD E100</option>
+                    <option value="-1">Electro-Voice (EV) ND308</option>
+                    <option value="-1">Electro-Voice (EV) RE10</option>
+                    <option value="-1">Electro-Voice (EV) RE20</option>
+                    <option value="-1">Neumann KM184</option>
+                    <option value="-1">Neumann M147</option>
+                    <option value="-1">Neumann U87</option>
+                    <option value="-1">Rode NT2</option>
+                    <option value="-1">Royer R-122</option>
+                    <option value="-1">Sennheiser e604</option>
+                    <option value="-1">Sennheiser MD421</option>
+                    <option value="-1">Shure Beta 52</option>
+                    <option value="-1">Shure SM57</option>
+                    <option value="-1">Shure SM58</option>
+                    <option value="-1">Shure SM81</option>
+                  </select>
+                  <!--<span class="selectInvalidMsg">Try again.</span>--><span class="selectRequiredMsg">Please select an item.</span></span>
+                </form>
+                <p>Capsule Design</p>
+                <form id="form44" name="form44" method="post" action="">
+                  <span id="spryselect44">
+                  <select name="Question44" id="Question44">
+                    <!-- Add items and values to the widget-->
+                    <option>Please select an item</option>
+                    <option value="1">Dynamic</option>
+                    <option value="-1">Condenser</option>
+                    <option value="-1">Ribbon</option>
+                    <option value="-1">Electret-Condenser</option>
+                    <option value="-1">Tube Condenser</option>
+                  </select>
+                  <!--<span class="selectInvalidMsg">Try again.</span>--><span class="selectRequiredMsg">Please select an item.</span></span>
+                </form>
+                <p>Polar Pattern(s)</p>
+                <form id="form45" name="form45" method="post" action="">
+                  <span id="spryselect45">
+                  <select name="Question45" id="Question45">
+                    <!-- Add items and values to the widget-->
+                    <option>Please select an item</option>
+                    <option value="1">Cardioid</option>
+                    <option value="-1">Bidirectional</option>
+                    <option value="-1">Cardioid and Omni</option>
+                    <option value="-1">Cardioid, Omni, and Bi</option>
+                    <option value="-1">Cardioid, Hypercardioid, Omni, and Bi</option>
+                    <option value="-1">Super-Cardioid</option>
+                  </select>
+                  <!--<span class="selectInvalidMsg">Try again.</span>--><span class="selectRequiredMsg">Please select an item.</span></span>
+                </form>
+                
+            </div>
+        </div>
+        <div class="slide">
+			<h1><img src="img/imgres-06.jpeg"  height='200' /></h1>
+            <div class="textbox">
+            	<p>Make / Model</p>
+                <form id="form46" name="form46" method="post" action="">
+                  <span id="spryselect46">
+                  <select name="Question46" id="Question46">
+                    <!-- Add items and values to the widget-->
+                    <option>Please select an item</option>
+                    <option value="-1">AKG C 414</option>
+                    <option value="-1">Audio-Technica (AT) 4031</option>
+                    <option value="-1">Audio-Technica (AT) 4033</option>
+                    <option value="-1">Audix D2</option>
+                    <option value="-1">Audix D4</option>
+                    <option value="-1">Audix D6</option>
+                    <option value="-1">Audix i5</option>
+                    <option value="-1">Blue Baby Bottle</option>
+                    <option value="-1">CAD E100</option>
+                    <option value="1">Electro-Voice (EV) ND308</option>
+                    <option value="-1">Electro-Voice (EV) RE10</option>
+                    <option value="-1">Electro-Voice (EV) RE20</option>
+                    <option value="-1">Neumann KM184</option>
+                    <option value="-1">Neumann M147</option>
+                    <option value="-1">Neumann U87</option>
+                    <option value="-1">Rode NT2</option>
+                    <option value="-1">Royer R-122</option>
+                    <option value="-1">Sennheiser e604</option>
+                    <option value="-1">Sennheiser MD421</option>
+                    <option value="-1">Shure Beta 52</option>
+                    <option value="-1">Shure SM57</option>
+                    <option value="-1">Shure SM58</option>
+                    <option value="-1">Shure SM81</option>
+                  </select>
+                  <!--<span class="selectInvalidMsg">Try again.</span>--><span class="selectRequiredMsg">Please select an item.</span></span>
+                </form>
+                <p>Capsule Design</p>
+                <form id="form47" name="form47" method="post" action="">
+                  <span id="spryselect47">
+                  <select name="Question47" id="Question47">
+                    <!-- Add items and values to the widget-->
+                    <option>Please select an item</option>
+                    <option value="1">Dynamic</option>
+                    <option value="-1">Condenser</option>
+                    <option value="-1">Ribbon</option>
+                    <option value="-1">Electret-Condenser</option>
+                    <option value="-1">Tube Condenser</option>
+                  </select>
+                  <!--<span class="selectInvalidMsg">Try again.</span>--><span class="selectRequiredMsg">Please select an item.</span></span>
+                </form>
+                <p>Polar Pattern(s)</p>
+                <form id="form48" name="form48" method="post" action="">
+                  <span id="spryselect48">
+                  <select name="Question48" id="Question48">
+                    <!-- Add items and values to the widget-->
+                    <option>Please select an item</option>
+                    <option value="1">Cardioid</option>
+                    <option value="-1">Bidirectional</option>
+                    <option value="-1">Cardioid and Omni</option>
+                    <option value="-1">Cardioid, Omni, and Bi</option>
+                    <option value="-1">Cardioid, Hypercardioid, Omni, and Bi</option>
+                    <option value="-1">Super-Cardioid</option>
+                  </select>
+                  <!--<span class="selectInvalidMsg">Try again.</span>--><span class="selectRequiredMsg">Please select an item.</span></span>
+                </form>
+                
+            </div>
+        </div>
+        <div class="slide">
+			<h1><img src="img/imgres-17.jpeg" height='200' /></h1>
+            <div class="textbox">
+            	<p>Make / Model</p>
+                <form id="form49" name="form49" method="post" action="">
+                  <span id="spryselect49">
+                  <select name="Question49" id="Question49">
+                    <!-- Add items and values to the widget-->
+                    <option>Please select an item</option>
+                    <option value="-1">AKG C 414</option>
+                    <option value="-1">Audio-Technica (AT) 4031</option>
+                    <option value="-1">Audio-Technica (AT) 4033</option>
+                    <option value="-1">Audix D2</option>
+                    <option value="-1">Audix D4</option>
+                    <option value="-1">Audix D6</option>
+                    <option value="-1">Audix i5</option>
+                    <option value="-1">Blue Baby Bottle</option>
+                    <option value="-1">CAD E100</option>
+                    <option value="-1">Electro-Voice (EV) ND308</option>
+                    <option value="-1">Electro-Voice (EV) RE10</option>
+                    <option value="-1">Electro-Voice (EV) RE20</option>
+                    <option value="-1">Neumann KM184</option>
+                    <option value="-1">Neumann M147</option>
+                    <option value="-1">Neumann U87</option>
+                    <option value="-1">Rode NT2</option>
+                    <option value="1">Royer R-122</option>
+                    <option value="-1">Sennheiser e604</option>
+                    <option value="-1">Sennheiser MD421</option>
+                    <option value="-1">Shure Beta 52</option>
+                    <option value="-1">Shure SM57</option>
+                    <option value="-1">Shure SM58</option>
+                    <option value="-1">Shure SM81</option>
+                  </select>
+                  <!--<span class="selectInvalidMsg">Try again.</span>--><span class="selectRequiredMsg">Please select an item.</span></span>
+                </form>
+                <p>Capsule Design</p>
+                <form id="form50" name="form50" method="post" action="">
+                  <span id="spryselect50">
+                  <select name="Question50" id="Question50">
+                    <!-- Add items and values to the widget-->
+                    <option>Please select an item</option>
+                    <option value="-1">Dynamic</option>
+                    <option value="-1">Condenser</option>
+                    <option value="1">Ribbon</option>
+                    <option value="-1">Electret-Condenser</option>
+                    <option value="-1">Tube Condenser</option>
+                  </select>
+                  <!--<span class="selectInvalidMsg">Try again.</span>--><span class="selectRequiredMsg">Please select an item.</span></span>
+                </form>
+                <p>Polar Pattern(s)</p>
+                <form id="form51" name="form51" method="post" action="">
+                  <span id="spryselect51">
+                  <select name="Question51" id="Question51">
+                    <!-- Add items and values to the widget-->
+                    <option>Please select an item</option>
+                    <option value="-1">Cardioid</option>
+                    <option value="1">Bidirectional</option>
+                    <option value="-1">Cardioid and Omni</option>
+                    <option value="-1">Cardioid, Omni, and Bi</option>
+                    <option value="-1">Cardioid, Hypercardioid, Omni, and Bi</option>
+                    <option value="-1">Super-Cardioid</option>
+                  </select>
+                  <!--<span class="selectInvalidMsg">Try again.</span>--><span class="selectRequiredMsg">Please select an item.</span></span>
+                </form>
+                
+            </div>
+        </div>
+        <div class="slide">
+			<h1><img src="img/imgres-08.jpeg"  height='200' /></h1>
+            <div class="textbox">
+            	<p>Make / Model</p>
+                <form id="form52" name="form52" method="post" action="">
+                  <span id="spryselect52">
+                  <select name="Question52" id="Question52">
+                    <!-- Add items and values to the widget-->
+                    <option>Please select an item</option>
+                    <option value="-1">AKG C 414</option>
+                    <option value="-1">Audio-Technica (AT) 4031</option>
+                    <option value="-1">Audio-Technica (AT) 4033</option>
+                    <option value="-1">Audix D2</option>
+                    <option value="-1">Audix D4</option>
+                    <option value="-1">Audix D6</option>
+                    <option value="-1">Audix i5</option>
+                    <option value="-1">Blue Baby Bottle</option>
+                    <option value="-1">CAD E100</option>
+                    <option value="-1">Electro-Voice (EV) ND308</option>
+                    <option value="-1">Electro-Voice (EV) RE10</option>
+                    <option value="-1">Electro-Voice (EV) RE20</option>
+                    <option value="-1">Neumann KM184</option>
+                    <option value="-1">Neumann M147</option>
+                    <option value="-1">Neumann U87</option>
+                    <option value="-1">Rode NT2</option>
+                    <option value="-1">Royer R-122</option>
+                    <option value="1">Sennheiser e604</option>
+                    <option value="-1">Sennheiser MD421</option>
+                    <option value="-1">Shure Beta 52</option>
+                    <option value="-1">Shure SM57</option>
+                    <option value="-1">Shure SM58</option>
+                    <option value="-1">Shure SM81</option>
+                  </select>
+                  <!--<span class="selectInvalidMsg">Try again.</span>--><span class="selectRequiredMsg">Please select an item.</span></span>
+                </form>
+                <p>Capsule Design</p>
+                <form id="form53" name="form53" method="post" action="">
+                  <span id="spryselect53">
+                  <select name="Question53" id="Question53">
+                    <!-- Add items and values to the widget-->
+                    <option>Please select an item</option>
+                    <option value="1">Dynamic</option>
+                    <option value="-1">Condenser</option>
+                    <option value="-1">Ribbon</option>
+                    <option value="-1">Electret-Condenser</option>
+                    <option value="-1">Tube Condenser</option>
+                  </select>
+                  <!--<span class="selectInvalidMsg">Try again.</span>--><span class="selectRequiredMsg">Please select an item.</span></span>
+                </form>
+                <p>Polar Pattern(s)</p>
+                <form id="form54" name="form54" method="post" action="">
+                  <span id="spryselect54">
+                  <select name="Question54" id="Question54">
+                    <!-- Add items and values to the widget-->
+                    <option>Please select an item</option>
+                    <option value="1">Cardioid</option>
+                    <option value="-1">Bidirectional</option>
+                    <option value="-1">Cardioid and Omni</option>
+                    <option value="-1">Cardioid, Omni, and Bi</option>
+                    <option value="-1">Cardioid, Hypercardioid, Omni, and Bi</option>
+                    <option value="-1">Super-Cardioid</option>
+                  </select>
+                  <!--<span class="selectInvalidMsg">Try again.</span>--><span class="selectRequiredMsg">Please select an item.</span></span>
+                </form>
+                
+            </div>
+        </div>
+        <div class="slide">
+			<h1><img src="img/imgres-19.jpeg" height='200' /></h1>
+            <div class="textbox">
+            	<p>Make / Model</p>
+                <form id="form55" name="form55" method="post" action="">
+                  <span id="spryselect55">
+                  <select name="Question55" id="Question55">
+                    <!-- Add items and values to the widget-->
+                    <option>Please select an item</option>
+                    <option value="-1">AKG C 414</option>
+                    <option value="-1">Audio-Technica (AT) 4031</option>
+                    <option value="-1">Audio-Technica (AT) 4033</option>
+                    <option value="-1">Audix D2</option>
+                    <option value="-1">Audix D4</option>
+                    <option value="-1">Audix D6</option>
+                    <option value="-1">Audix i5</option>
+                    <option value="-1">Blue Baby Bottle</option>
+                    <option value="-1">CAD E100</option>
+                    <option value="-1">Electro-Voice (EV) ND308</option>
+                    <option value="-1">Electro-Voice (EV) RE10</option>
+                    <option value="-1">Electro-Voice (EV) RE20</option>
+                    <option value="-1">Neumann KM184</option>
+                    <option value="-1">Neumann M147</option>
+                    <option value="1">Neumann U87</option>
+                    <option value="-1">Rode NT2</option>
+                    <option value="-1">Royer R-122</option>
+                    <option value="-1">Sennheiser e604</option>
+                    <option value="-1">Sennheiser MD421</option>
+                    <option value="-1">Shure Beta 52</option>
+                    <option value="-1">Shure SM57</option>
+                    <option value="-1">Shure SM58</option>
+                    <option value="-1">Shure SM81</option>
+                  </select>
+                  <!--<span class="selectInvalidMsg">Try again.</span>--><span class="selectRequiredMsg">Please select an item.</span></span>
+                </form>
+                <p>Capsule Design</p>
+                <form id="form56" name="form56" method="post" action="">
+                  <span id="spryselect56">
+                  <select name="Question56" id="Question56">
+                    <!-- Add items and values to the widget-->
+                    <option>Please select an item</option>
+                    <option value="-1">Dynamic</option>
+                    <option value="1">Condenser</option>
+                    <option value="-1">Ribbon</option>
+                    <option value="-1">Electret-Condenser</option>
+                    <option value="-1">Tube Condenser</option>
+                  </select>
+                  <!--<span class="selectInvalidMsg">Try again.</span>--><span class="selectRequiredMsg">Please select an item.</span></span>
+                </form>
+                <p>Polar Pattern(s)</p>
+                <form id="form57" name="form57" method="post" action="">
+                  <span id="spryselect57">
+                  <select name="Question57" id="Question57">
+                    <!-- Add items and values to the widget-->
+                    <option>Please select an item</option>
+                    <option value="-1">Cardioid</option>
+                    <option value="-1">Bidirectional</option>
+                    <option value="-1">Cardioid and Omni</option>
+                    <option value="1">Cardioid, Omni, and Bi</option>
+                    <option value="-1">Cardioid, Hypercardioid, Omni, and Bi</option>
+                    <option value="-1">Super-Cardioid</option>
+                  </select>
+                  <!--<span class="selectInvalidMsg">Try again.</span>--><span class="selectRequiredMsg">Please select an item.</span></span>
+                </form>
+                
+            </div>
+        </div>
+        <div class="slide">
+			<h1><img src="img/imgres-10.jpeg"  height='200' /></h1>
+            <div class="textbox">
+            	<p>Make / Model</p>
+                <form id="form58" name="form58" method="post" action="">
+                  <span id="spryselect58">
+                  <select name="Question58" id="Question58">
+                    <!-- Add items and values to the widget-->
+                    <option>Please select an item</option>
+                    <option value="-1">AKG C 414</option>
+                    <option value="-1">Audio-Technica (AT) 4031</option>
+                    <option value="1">Audio-Technica (AT) 4033</option>
+                    <option value="-1">Audix D2</option>
+                    <option value="-1">Audix D4</option>
+                    <option value="-1">Audix D6</option>
+                    <option value="-1">Audix i5</option>
+                    <option value="-1">Blue Baby Bottle</option>
+                    <option value="-1">CAD E100</option>
+                    <option value="-1">Electro-Voice (EV) ND308</option>
+                    <option value="-1">Electro-Voice (EV) RE10</option>
+                    <option value="-1">Electro-Voice (EV) RE20</option>
+                    <option value="-1">Neumann KM184</option>
+                    <option value="-1">Neumann M147</option>
+                    <option value="-1">Neumann U87</option>
+                    <option value="-1">Rode NT2</option>
+                    <option value="-1">Royer R-122</option>
+                    <option value="-1">Sennheiser e604</option>
+                    <option value="-1">Sennheiser MD421</option>
+                    <option value="-1">Shure Beta 52</option>
+                    <option value="-1">Shure SM57</option>
+                    <option value="1">Shure SM58</option>
+                    <option value="-1">Shure SM81</option>
+                  </select>
+                  <!--<span class="selectInvalidMsg">Try again.</span>--><span class="selectRequiredMsg">Please select an item.</span></span>
+                </form>
+                <p>Capsule Design</p>
+                <form id="form59" name="form59" method="post" action="">
+                  <span id="spryselect59">
+                  <select name="Question59" id="Question59">
+                    <!-- Add items and values to the widget-->
+                    <option>Please select an item</option>
+                    <option value="-1">Dynamic</option>
+                    <option value="1">Condenser</option>
+                    <option value="-1">Ribbon</option>
+                    <option value="-1">Electret-Condenser</option>
+                    <option value="-1">Tube Condenser</option>
+                  </select>
+                  <!--<span class="selectInvalidMsg">Try again.</span>--><span class="selectRequiredMsg">Please select an item.</span></span>
+                </form>
+                <p>Polar Pattern(s)</p>
+                <form id="form60" name="form60" method="post" action="">
+                  <span id="spryselect60">
+                  <select name="Question60" id="Question60">
+                    <!-- Add items and values to the widget-->
+                    <option>Please select an item</option>
+                    <option value="1">Cardioid</option>
+                    <option value="-1">Bidirectional</option>
+                    <option value="-1">Cardioid and Omni</option>
+                    <option value="-1">Cardioid, Omni, and Bi</option>
+                    <option value="-1">Cardioid, Hypercardioid, Omni, and Bi</option>
+                    <option value="-1">Super-Cardioid</option>
+                  </select>
+                  <!--<span class="selectInvalidMsg">Try again.</span>--><span class="selectRequiredMsg">Please select an item.</span></span>
+                </form>
+                
+            </div>
+        </div>
+        <div class="slide">
+			<h1><img src="img/imgres-21.jpeg" height='200' /></h1>
+            <div class="textbox">
+            	<p>Make / Model</p>
+                <form id="form61" name="form61" method="post" action="">
+                  <span id="spryselect61">
+                  <select name="Question61" id="Question61">
+                    <!-- Add items and values to the widget-->
+                    <option>Please select an item</option>
+                    <option value="-1">AKG C 414</option>
+                    <option value="-1">Audio-Technica (AT) 4031</option>
+                    <option value="-1">Audio-Technica (AT) 4033</option>
+                    <option value="-1">Audix D2</option>
+                    <option value="-1">Audix D4</option>
+                    <option value="-1">Audix D6</option>
+                    <option value="-1">Audix i5</option>
+                    <option value="-1">Blue Baby Bottle</option>
+                    <option value="-1">CAD E100</option>
+                    <option value="-1">Electro-Voice (EV) ND308</option>
+                    <option value="-1">Electro-Voice (EV) RE10</option>
+                    <option value="-1">Electro-Voice (EV) RE20</option>
+                    <option value="-1">Neumann KM184</option>
+                    <option value="1">Neumann M147</option>
+                    <option value="-1">Neumann U87</option>
+                    <option value="-1">Rode NT2</option>
+                    <option value="-1">Royer R-122</option>
+                    <option value="-1">Sennheiser e604</option>
+                    <option value="-1">Sennheiser MD421</option>
+                    <option value="-1">Shure Beta 52</option>
+                    <option value="-1">Shure SM57</option>
+                    <option value="-1">Shure SM58</option>
+                    <option value="-1">Shure SM81</option>
+                  </select>
+                  <!--<span class="selectInvalidMsg">Try again.</span>--><span class="selectRequiredMsg">Please select an item.</span></span>
+                </form>
+                <p>Capsule Design</p>
+                <form id="form62" name="form62" method="post" action="">
+                  <span id="spryselect62">
+                  <select name="Question62" id="Question62">
+                    <!-- Add items and values to the widget-->
+                    <option>Please select an item</option>
+                    <option value="-1">Dynamic</option>
+                    <option value="-1">Condenser</option>
+                    <option value="-1">Ribbon</option>
+                    <option value="-1">Electret-Condenser</option>
+                    <option value="1">Tube Condenser</option>
+                  </select>
+                  <!--<span class="selectInvalidMsg">Try again.</span>--><span class="selectRequiredMsg">Please select an item.</span></span>
+                </form>
+                <p>Polar Pattern(s)</p>
+                <form id="form63" name="form63" method="post" action="">
+                  <span id="spryselect63">
+                  <select name="Question63" id="Question63">
+                    <!-- Add items and values to the widget-->
+                    <option>Please select an item</option>
+                    <option value="1">Cardioid</option>
+                    <option value="-1">Bidirectional</option>
+                    <option value="-1">Cardioid and Omni</option>
+                    <option value="-1">Cardioid, Omni, and Bi</option>
+                    <option value="-1">Cardioid, Hypercardioid, Omni, and Bi</option>
+                    <option value="-1">Super-Cardioid</option>
+                  </select>
+                  <!--<span class="selectInvalidMsg">Try again.</span>--><span class="selectRequiredMsg">Please select an item.</span></span>
+                </form>
+                
+            </div>
+        </div>
+        <div class="slide">
+			<h1><img src="img/imgres-02.jpeg"  height='200' /></h1>
+            <div class="textbox">
+            	<p>Make / Model</p>
+                <form id="form64" name="form64" method="post" action="">
+                  <span id="spryselect64">
+                  <select name="Question64" id="Question64">
+                    <!-- Add items and values to the widget-->
+                    <option>Please select an item</option>
+                    <option value="-1">AKG C 414</option>
+                    <option value="-1">Audio-Technica (AT) 4031</option>
+                    <option value="-1">Audio-Technica (AT) 4033</option>
+                    <option value="-1">Audix D2</option>
+                    <option value="-1">Audix D4</option>
+                    <option value="-1">Audix D6</option>
+                    <option value="-1">Audix i5</option>
+                    <option value="-1">Blue Baby Bottle</option>
+                    <option value="-1">CAD E100</option>
+                    <option value="-1">Electro-Voice (EV) ND308</option>
+                    <option value="-1">Electro-Voice (EV) RE10</option>
+                    <option value="-1">Electro-Voice (EV) RE20</option>
+                    <option value="-1">Neumann KM184</option>
+                    <option value="-1">Neumann M147</option>
+                    <option value="-1">Neumann U87</option>
+                    <option value="-1">Rode NT2</option>
+                    <option value="-1">Royer R-122</option>
+                    <option value="-1">Sennheiser e604</option>
+                    <option value="-1">Sennheiser MD421</option>
+                    <option value="-1">Shure Beta 52</option>
+                    <option value="-1">Shure SM57</option>
+                    <option value="-1">Shure SM58</option>
+                    <option value="1">Shure SM81</option>
+                  </select>
+                  <!--<span class="selectInvalidMsg">Try again.</span>--><span class="selectRequiredMsg">Please select an item.</span></span>
+                </form>
+                <p>Capsule Design</p>
+                <form id="form65" name="form65" method="post" action="">
+                  <span id="spryselect65">
+                  <select name="Question65" id="Question65">
+                    <!-- Add items and values to the widget-->
+                    <option>Please select an item</option>
+                    <option value="-1">Dynamic</option>
+                    <option value="1">Condenser</option>
+                    <option value="-1">Ribbon</option>
+                    <option value="-1">Electret-Condenser</option>
+                    <option value="-1">Tube Condenser</option>
+                  </select>
+                  <!--<span class="selectInvalidMsg">Try again.</span>--><span class="selectRequiredMsg">Please select an item.</span></span>
+                </form>
+                <p>Polar Pattern(s)</p>
+                <form id="form66" name="form66" method="post" action="">
+                  <span id="spryselect66">
+                  <select name="Question66" id="Question66">
+                    <!-- Add items and values to the widget-->
+                    <option>Please select an item</option>
+                    <option value="1">Cardioid</option>
+                    <option value="-1">Bidirectional</option>
+                    <option value="-1">Cardioid and Omni</option>
+                    <option value="-1">Cardioid, Omni, and Bi</option>
+                    <option value="-1">Cardioid, Hypercardioid, Omni, and Bi</option>
+                    <option value="-1">Super-Cardioid</option>
+                  </select>
+                  <!--<span class="selectInvalidMsg">Try again.</span>--><span class="selectRequiredMsg">Please select an item.</span></span>
+                </form>
+                
+            </div>
+        </div>
+        <div class="slide">
+			<h1><img src="img/imgres-23.jpeg" height='200' /></h1>
+            <div class="textbox">
+            	<p>Make / Model</p>
+                <form id="form67" name="form67" method="post" action="">
+                  <span id="spryselect67">
+                  <select name="Question67" id="Question67">
+                    <!-- Add items and values to the widget-->
+                    <option>Please select an item</option>
+                    <option value="-1">AKG C 414</option>
+                    <option value="-1">Audio-Technica (AT) 4031</option>
+                    <option value="-1">Audio-Technica (AT) 4033</option>
+                    <option value="-1">Audix D2</option>
+                    <option value="-1">Audix D4</option>
+                    <option value="-1">Audix D6</option>
+                    <option value="-1">Audix i5</option>
+                    <option value="-1">Blue Baby Bottle</option>
+                    <option value="-1">CAD E100</option>
+                    <option value="-1">Electro-Voice (EV) ND308</option>
+                    <option value="-1">Electro-Voice (EV) RE10</option>
+                    <option value="-1">Electro-Voice (EV) RE20</option>
+                    <option value="-1">Neumann KM184</option>
+                    <option value="-1">Neumann M147</option>
+                    <option value="-1">Neumann U87</option>
+                    <option value="-1">Rode NT2</option>
+                    <option value="-1">Royer R-122</option>
+                    <option value="-1">Sennheiser e604</option>
+                    <option value="-1">Sennheiser MD421</option>
+                    <option value="-1">Shure Beta 52</option>
+                    <option value="1">Shure SM57</option>
+                    <option value="-1">Shure SM58</option>
+                    <option value="-1">Shure SM81</option>
+                  </select>
+                  <!--<span class="selectInvalidMsg">Try again.</span>--><span class="selectRequiredMsg">Please select an item.</span></span>
+                </form>
+                <p>Capsule Design</p>
+                <form id="form68" name="form68" method="post" action="">
+                  <span id="spryselect68">
+                  <select name="Question68" id="Question68">
+                    <!-- Add items and values to the widget-->
+                    <option>Please select an item</option>
+                    <option value="1">Dynamic</option>
+                    <option value="-1">Condenser</option>
+                    <option value="-1">Ribbon</option>
+                    <option value="-1">Electret-Condenser</option>
+                    <option value="-1">Tube Condenser</option>
+                  </select>
+                  <!--<span class="selectInvalidMsg">Try again.</span>--><span class="selectRequiredMsg">Please select an item.</span></span>
+                </form>
+                <p>Polar Pattern(s)</p>
+                <form id="form69" name="form69" method="post" action="">
+                  <span id="spryselect69">
+                  <select name="Question69" id="Question69">
+                    <!-- Add items and values to the widget-->
+                    <option>Please select an item</option>
+                    <option value="1">Cardioid</option>
+                    <option value="-1">Bidirectional</option>
+                    <option value="-1">Cardioid and Omni</option>
+                    <option value="-1">Cardioid, Omni, and Bi</option>
+                    <option value="-1">Cardioid, Hypercardioid, Omni, and Bi</option>
+                    <option value="-1">Super-Cardioid</option>
+                  </select>
+                  <!--<span class="selectInvalidMsg">Try again.</span>--><span class="selectRequiredMsg">Please select an item.</span></span>
+                </form>
+                
+            </div>
+        </div>
+	</div>
+</div>
+</div>
+<div id="copyright">&copy; 2011 Justin Riley</div>
+</body>
+<script>
+
+
+///function goto3() {
+///	document.getElementById("slideshowTape_1").style.left = "-1200px";
+///}
+
+var total = 23;
+var currentSlide = 1;
+
+function goto(slideID) {
+	document.getElementById("slideshowTape_1").style.top = (slideID - 1) * -400 + "px";
+	var count;
+	for(count=1; count<=total; count++) {
+		document.getElementById("slideTab"+count).className = "slideTab hidden";
+	}
+	document.getElementById("slideTab"+slideID).className = "slideTab";
+	currentSlide = slideID
+}
+
+function next(amount) {
+	if (currentSlide==0) {
+		showSingle();
+	}
+	else {
+		if (amount==1) {
+			currentSlide++;
+			if (currentSlide>total) {
+				currentSlide = 1;
+				goto(currentSlide);
+			}
+			else {
+			goto(currentSlide)
+			}
+		}
+		else {
+			currentSlide--;
+			if (currentSlide==0) {
+				currentSlide = total;
+				goto(currentSlide);
+			}
+			else {
+			goto(currentSlide);
+			}
+		}
+	}
+}
+
+function showAll() {
+	for(count=1; count<=total; count++) {
+		document.getElementById("slideTab"+count).className = "slideTab hidden";
+	}
+	document.getElementById("slideshowTape_1").style.top = "0px";
+	document.getElementById("slideshowWindow_1").className = "slideshowWindow showThemAll";
+	document.getElementById("slideshowTape_1").className = "slideshowTape showThemAll";
+	document.getElementById("singleButton_1").className = "slideTab";
+	document.getElementById("showAllButton_1").className = "slideTab hidden";
+	currentSlide=0;
+}
+
+function showSingle() {
+	document.getElementById("slideshowWindow_1").className = "slideshowWindow";
+	document.getElementById("slideshowTape_1").className = "slideshowTape";
+	document.getElementById("singleButton_1").className = "slideTab hidden";
+	document.getElementById("showAllButton_1").className = "slideTab";
+	goto(1);
+}
+
+function ran() {
+	if (currentSlide==0) {
+		showSingle();
+	}
+	else {
+		randomNumber=Math.round(Math.random()*23);
+		randomNumber++;
+		if (randomNumber==currentSlide) {
+			randomNumber++;
+		}
+		if (randomNumber>23) {
+			randomNumber=1
+		}
+		goto(randomNumber);
+	}
+}
+
+///goto(1);
+goto(1);
+
+
+var spryselect1 = new Spry.Widget.ValidationSelect("spryselect1", {validateOn:["change"], invalidValue:"-1"});
+var spryselect2 = new Spry.Widget.ValidationSelect("spryselect2", {validateOn:["change"], invalidValue:"-1"});
+var spryselect3 = new Spry.Widget.ValidationSelect("spryselect3", {validateOn:["change"], invalidValue:"-1"});
+var spryselect4 = new Spry.Widget.ValidationSelect("spryselect4", {validateOn:["change"], invalidValue:"-1"});
+var spryselect5 = new Spry.Widget.ValidationSelect("spryselect5", {validateOn:["change"], invalidValue:"-1"});
+var spryselect6 = new Spry.Widget.ValidationSelect("spryselect6", {validateOn:["change"], invalidValue:"-1"});
+var spryselect7 = new Spry.Widget.ValidationSelect("spryselect7", {validateOn:["change"], invalidValue:"-1"});
+var spryselect8 = new Spry.Widget.ValidationSelect("spryselect8", {validateOn:["change"], invalidValue:"-1"});
+var spryselect9 = new Spry.Widget.ValidationSelect("spryselect9", {validateOn:["change"], invalidValue:"-1"});
+var spryselect10 = new Spry.Widget.ValidationSelect("spryselect10", {validateOn:["change"], invalidValue:"-1"});
+var spryselect11 = new Spry.Widget.ValidationSelect("spryselect11", {validateOn:["change"], invalidValue:"-1"});
+var spryselect12 = new Spry.Widget.ValidationSelect("spryselect12", {validateOn:["change"], invalidValue:"-1"});
+var spryselect13 = new Spry.Widget.ValidationSelect("spryselect13", {validateOn:["change"], invalidValue:"-1"});
+var spryselect14 = new Spry.Widget.ValidationSelect("spryselect14", {validateOn:["change"], invalidValue:"-1"});
+var spryselect15 = new Spry.Widget.ValidationSelect("spryselect15", {validateOn:["change"], invalidValue:"-1"});
+var spryselect16 = new Spry.Widget.ValidationSelect("spryselect16", {validateOn:["change"], invalidValue:"-1"});
+var spryselect17 = new Spry.Widget.ValidationSelect("spryselect17", {validateOn:["change"], invalidValue:"-1"});
+var spryselect18 = new Spry.Widget.ValidationSelect("spryselect18", {validateOn:["change"], invalidValue:"-1"});
+var spryselect19 = new Spry.Widget.ValidationSelect("spryselect19", {validateOn:["change"], invalidValue:"-1"});
+var spryselect20 = new Spry.Widget.ValidationSelect("spryselect20", {validateOn:["change"], invalidValue:"-1"});
+var spryselect21 = new Spry.Widget.ValidationSelect("spryselect21", {validateOn:["change"], invalidValue:"-1"});
+var spryselect22 = new Spry.Widget.ValidationSelect("spryselect22", {validateOn:["change"], invalidValue:"-1"});
+var spryselect23 = new Spry.Widget.ValidationSelect("spryselect23", {validateOn:["change"], invalidValue:"-1"});
+var spryselect24 = new Spry.Widget.ValidationSelect("spryselect24", {validateOn:["change"], invalidValue:"-1"});
+var spryselect25 = new Spry.Widget.ValidationSelect("spryselect25", {validateOn:["change"], invalidValue:"-1"});
+var spryselect26 = new Spry.Widget.ValidationSelect("spryselect26", {validateOn:["change"], invalidValue:"-1"});
+var spryselect27 = new Spry.Widget.ValidationSelect("spryselect27", {validateOn:["change"], invalidValue:"-1"});
+var spryselect28 = new Spry.Widget.ValidationSelect("spryselect28", {validateOn:["change"], invalidValue:"-1"});
+var spryselect29 = new Spry.Widget.ValidationSelect("spryselect29", {validateOn:["change"], invalidValue:"-1"});
+var spryselect30 = new Spry.Widget.ValidationSelect("spryselect30", {validateOn:["change"], invalidValue:"-1"});
+var spryselect31 = new Spry.Widget.ValidationSelect("spryselect31", {validateOn:["change"], invalidValue:"-1"});
+var spryselect32 = new Spry.Widget.ValidationSelect("spryselect32", {validateOn:["change"], invalidValue:"-1"});
+var spryselect33 = new Spry.Widget.ValidationSelect("spryselect33", {validateOn:["change"], invalidValue:"-1"});
+var spryselect34 = new Spry.Widget.ValidationSelect("spryselect34", {validateOn:["change"], invalidValue:"-1"});
+var spryselect35 = new Spry.Widget.ValidationSelect("spryselect35", {validateOn:["change"], invalidValue:"-1"});
+var spryselect36 = new Spry.Widget.ValidationSelect("spryselect36", {validateOn:["change"], invalidValue:"-1"});
+var spryselect37 = new Spry.Widget.ValidationSelect("spryselect37", {validateOn:["change"], invalidValue:"-1"});
+var spryselect38 = new Spry.Widget.ValidationSelect("spryselect38", {validateOn:["change"], invalidValue:"-1"});
+var spryselect39 = new Spry.Widget.ValidationSelect("spryselect39", {validateOn:["change"], invalidValue:"-1"});
+var spryselect40 = new Spry.Widget.ValidationSelect("spryselect40", {validateOn:["change"], invalidValue:"-1"});
+var spryselect41 = new Spry.Widget.ValidationSelect("spryselect41", {validateOn:["change"], invalidValue:"-1"});
+var spryselect42 = new Spry.Widget.ValidationSelect("spryselect42", {validateOn:["change"], invalidValue:"-1"});
+var spryselect43 = new Spry.Widget.ValidationSelect("spryselect43", {validateOn:["change"], invalidValue:"-1"});
+var spryselect44 = new Spry.Widget.ValidationSelect("spryselect44", {validateOn:["change"], invalidValue:"-1"});
+var spryselect45 = new Spry.Widget.ValidationSelect("spryselect45", {validateOn:["change"], invalidValue:"-1"});
+var spryselect46 = new Spry.Widget.ValidationSelect("spryselect46", {validateOn:["change"], invalidValue:"-1"});
+var spryselect47 = new Spry.Widget.ValidationSelect("spryselect47", {validateOn:["change"], invalidValue:"-1"});
+var spryselect48 = new Spry.Widget.ValidationSelect("spryselect48", {validateOn:["change"], invalidValue:"-1"});
+var spryselect49 = new Spry.Widget.ValidationSelect("spryselect49", {validateOn:["change"], invalidValue:"-1"});
+var spryselect50 = new Spry.Widget.ValidationSelect("spryselect50", {validateOn:["change"], invalidValue:"-1"});
+var spryselect51 = new Spry.Widget.ValidationSelect("spryselect51", {validateOn:["change"], invalidValue:"-1"});
+var spryselect52 = new Spry.Widget.ValidationSelect("spryselect52", {validateOn:["change"], invalidValue:"-1"});
+var spryselect53 = new Spry.Widget.ValidationSelect("spryselect53", {validateOn:["change"], invalidValue:"-1"});
+var spryselect54 = new Spry.Widget.ValidationSelect("spryselect54", {validateOn:["change"], invalidValue:"-1"});
+var spryselect55 = new Spry.Widget.ValidationSelect("spryselect55", {validateOn:["change"], invalidValue:"-1"});
+var spryselect56 = new Spry.Widget.ValidationSelect("spryselect56", {validateOn:["change"], invalidValue:"-1"});
+var spryselect57 = new Spry.Widget.ValidationSelect("spryselect57", {validateOn:["change"], invalidValue:"-1"});
+var spryselect58 = new Spry.Widget.ValidationSelect("spryselect58", {validateOn:["change"], invalidValue:"-1"});
+var spryselect59 = new Spry.Widget.ValidationSelect("spryselect59", {validateOn:["change"], invalidValue:"-1"});
+var spryselect60 = new Spry.Widget.ValidationSelect("spryselect60", {validateOn:["change"], invalidValue:"-1"});
+var spryselect61 = new Spry.Widget.ValidationSelect("spryselect61", {validateOn:["change"], invalidValue:"-1"});
+var spryselect62 = new Spry.Widget.ValidationSelect("spryselect62", {validateOn:["change"], invalidValue:"-1"});
+var spryselect63 = new Spry.Widget.ValidationSelect("spryselect63", {validateOn:["change"], invalidValue:"-1"});
+var spryselect64 = new Spry.Widget.ValidationSelect("spryselect64", {validateOn:["change"], invalidValue:"-1"});
+var spryselect65 = new Spry.Widget.ValidationSelect("spryselect65", {validateOn:["change"], invalidValue:"-1"});
+var spryselect66 = new Spry.Widget.ValidationSelect("spryselect66", {validateOn:["change"], invalidValue:"-1"});
+var spryselect67 = new Spry.Widget.ValidationSelect("spryselect67", {validateOn:["change"], invalidValue:"-1"});
+var spryselect68 = new Spry.Widget.ValidationSelect("spryselect68", {validateOn:["change"], invalidValue:"-1"});
+var spryselect69 = new Spry.Widget.ValidationSelect("spryselect69", {validateOn:["change"], invalidValue:"-1"});
+
+
+
+
+</script>
+</html>
